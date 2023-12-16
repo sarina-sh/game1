@@ -4,32 +4,53 @@ using UnityEngine;
 
 public class CarController : MonoBehaviour
 {
-    public float speed = 10f; // Adjust the speed of movement
-    public float laneWidth = 3f; // Adjust the width of each lane
+    public float constantSpeed = 0f; // Constant speed of the car
+    public float acceleration = 10f; // Speed increase when pressing "W"
+    public float deceleration = 30f; // Speed decrease when pressing "S"
+    public float horizontalSpeedRatio = 0.1f;
+
+    private float currentSpeed;
 
     void Start()
     {
-        
+        currentSpeed = constantSpeed;
     }
 
     void Update()
     {
-        // Get input from keys
-        float verticalInput = Input.GetAxis("Vertical");
-        float horizontalInput = Input.GetAxis("Horizontal");
+        // Move the car forward with the current speed
+        transform.Translate(Vector3.forward * currentSpeed * Time.deltaTime);
 
-        // Calculate movement
-        Vector3 movement = transform.forward * verticalInput;
+        // Check for input to adjust speed
+        HandleInput();
+        MoveHorizontally();
+    }
 
-        // Move the car forward or backward
-        transform.Translate(movement * speed * Time.deltaTime);
-
-        // Change lanes left or right
-        if (horizontalInput != 0f)
+    void HandleInput()
+    {
+        // Increase speed when "W" key is pressed
+        if (Input.GetKey(KeyCode.W))
         {
-            float targetLane = Mathf.Round(transform.position.x / laneWidth) * laneWidth;
-            float horizontalMovement = Mathf.MoveTowards(transform.position.x, targetLane, speed * Time.deltaTime);
-            transform.position = new Vector3(horizontalMovement, transform.position.y, transform.position.z);
+            currentSpeed += acceleration * Time.deltaTime;
         }
+        else if (Input.GetKey(KeyCode.S))
+        {
+            // Decrease speed when "S" key is pressed
+            currentSpeed -= deceleration * Time.deltaTime;
+
+            // Ensure the speed doesn't go below the 0
+            currentSpeed = Mathf.Max(0, currentSpeed);
+        }
+    }
+    void MoveHorizontally()
+    {
+        float horizontalInput = Input.GetAxis("Horizontal");
+        float newPosition = transform.position.x + horizontalInput * horizontalSpeedRatio * currentSpeed * Time.deltaTime;
+
+        // Limit the horizontal position within the specified range
+        newPosition = Mathf.Clamp(newPosition, -7, 7);
+
+        // Update the car's position
+        transform.position = new Vector3(newPosition, transform.position.y, transform.position.z);
     }
 }

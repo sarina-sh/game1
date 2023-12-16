@@ -199,7 +199,12 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 14a40c77fd1fef84c857df4a9e33228d, type: 3}
   m_PrefabInstance: {fileID: 1572155853}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &560259038
+--- !u!4 &560259039 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 14a40c77fd1fef84c857df4a9e33228d, type: 3}
+  m_PrefabInstance: {fileID: 1572155853}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &560259040
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -211,13 +216,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8502a43b15384c0409ab8d2c39a03cb2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 50
-  laneWidth: 3
---- !u!4 &560259039 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 14a40c77fd1fef84c857df4a9e33228d, type: 3}
-  m_PrefabInstance: {fileID: 1572155853}
-  m_PrefabAsset: {fileID: 0}
+  constantSpeed: 0
+  acceleration: 10
+  deceleration: 50
+  horizontalSpeedRatio: 0.2
 --- !u!1 &705507993
 GameObject:
   m_ObjectHideFlags: 0
