@@ -7,9 +7,11 @@ public class CarController : MonoBehaviour
     public float startSpeed = 0f; // Constant speed of the car
     public float acceleration = 10f; // Speed increase when pressing "W"
     public float deceleration = 50f; // Speed decrease when pressing "S"
-    public float horizontalSpeedRatio = 0.2f;
+    public float horizontalSpeedRatio = 0.15f;
 
     public GameObject tunnelPrefab; 
+    public Light leftLight; 
+    public Light rightLight; 
     public float tunnelSpawnProbability = 0.07f; // Probability of a tunnel spawning
     public float tunnelSpawnDistance = 500f; // where tunnel will be spawn
 
@@ -28,6 +30,15 @@ public class CarController : MonoBehaviour
     {
         // Move the car forward with the current speed
         transform.Translate(Vector3.forward * currentSpeed * Time.deltaTime);
+
+        if (tunnelStartPosition <= transform.position.z && transform.position.z <= tunnelEndPosition)
+        {
+            TurnOnCarLights();
+        }
+        else
+        {
+            TurnOffCarLights();
+        }
 
         // Check for input to adjust speed
         HandleInput();
@@ -69,14 +80,28 @@ public class CarController : MonoBehaviour
         // Randomly decide whether to spawn a tunnel
         if (Random.value < tunnelSpawnProbability && transform.position.z > tunnelEndPosition)
         {
-            // Spawn a tunnel at a random position along the road
+            // Spawn a tunnel 
             Vector3 tunnelPosition = new Vector3(0, 0f, transform.position.z + tunnelSpawnDistance);
             float tunnelLength = Random.Range(minTunnelLength, maxTunnelLength);
-            tunnelStartPosition = transform.position.z + tunnelSpawnDistance;
-            tunnelEndPosition = transform.position.z + tunnelSpawnDistance + tunnelLength;
+            tunnelStartPosition = transform.position.z + tunnelSpawnDistance - tunnelLength / 2;
+            tunnelEndPosition = transform.position.z + tunnelSpawnDistance + tunnelLength / 2;
             
             GameObject tunnel = Instantiate(tunnelPrefab, tunnelPosition, Quaternion.identity);
             tunnel.transform.localScale = new Vector3(tunnel.transform.localScale.x, tunnel.transform.localScale.y, tunnelLength);
         }
+    }
+    
+    void TurnOnCarLights()
+    {
+        Debug.Log("Lights On!");
+        leftLight.enabled = true;
+        rightLight.enabled = true;
+    }
+    
+    void TurnOffCarLights()
+    {
+        Debug.Log("Lights Off!");
+        leftLight.enabled = false;
+        rightLight.enabled = false;
     }
 }
