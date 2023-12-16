@@ -4,16 +4,16 @@ using UnityEngine;
 
 public class CarController : MonoBehaviour
 {
-    public float constantSpeed = 0f; // Constant speed of the car
+    public float startSpeed = 0f; // Constant speed of the car
     public float acceleration = 10f; // Speed increase when pressing "W"
-    public float deceleration = 30f; // Speed decrease when pressing "S"
-    public float horizontalSpeedRatio = 0.1f;
+    public float deceleration = 50f; // Speed decrease when pressing "S"
+    public float horizontalSpeedRatio = 0.2f;
 
     private float currentSpeed;
 
     void Start()
     {
-        currentSpeed = constantSpeed;
+        currentSpeed = startSpeed;
     }
 
     void Update()
