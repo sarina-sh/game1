@@ -9,7 +9,15 @@ public class CarController : MonoBehaviour
     public float deceleration = 50f; // Speed decrease when pressing "S"
     public float horizontalSpeedRatio = 0.2f;
 
+    public GameObject tunnelPrefab; 
+    public float tunnelSpawnProbability = 0.07f; // Probability of a tunnel spawning
+    public float tunnelSpawnDistance = 500f; // where tunnel will be spawn
+
+    public float minTunnelLength = 100f;
+    public float maxTunnelLength = 300f;
     private float currentSpeed;
+    private float tunnelStartPosition = -1f;
+    private float tunnelEndPosition = -1f;
 
     void Start()
     {
@@ -24,6 +32,7 @@ public class CarController : MonoBehaviour
         // Check for input to adjust speed
         HandleInput();
         MoveHorizontally();
+        TrySpawnTunnel();
     }
 
     void HandleInput()
@@ -52,5 +61,22 @@ public class CarController : MonoBehaviour
 
         // Update the car's position
         transform.position = new Vector3(newPosition, transform.position.y, transform.position.z);
+    }
+    
+    
+    void TrySpawnTunnel()
+    {
+        // Randomly decide whether to spawn a tunnel
+        if (Random.value < tunnelSpawnProbability && transform.position.z > tunnelEndPosition)
+        {
+            // Spawn a tunnel at a random position along the road
+            Vector3 tunnelPosition = new Vector3(0, 0f, transform.position.z + tunnelSpawnDistance);
+            float tunnelLength = Random.Range(minTunnelLength, maxTunnelLength);
+            tunnelStartPosition = transform.position.z + tunnelSpawnDistance;
+            tunnelEndPosition = transform.position.z + tunnelSpawnDistance + tunnelLength;
+            
+            GameObject tunnel = Instantiate(tunnelPrefab, tunnelPosition, Quaternion.identity);
+            tunnel.transform.localScale = new Vector3(tunnel.transform.localScale.x, tunnel.transform.localScale.y, tunnelLength);
+        }
     }
 }
